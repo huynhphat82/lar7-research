@@ -77,3 +77,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## SQL
+```
+select *,
+(
+	select array_to_json(array_agg(row_to_json(r)))
+	from (
+		select o.* from orders as o where o.channel_id = c.id
+	) as r
+) as list
+from channels as c
+where company_id = 1;
+```
