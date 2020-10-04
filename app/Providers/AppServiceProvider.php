@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\User;
 use App\Binding\Binding;
 use App\Observers\UserObserver;
-use App\User;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
+
         //
         Blade::directive('dd', function ($value) {
             return "<?php dd($value); ?>";
@@ -74,6 +77,6 @@ class AppServiceProvider extends ServiceProvider
         // Blade::component('alert', \App\View\Components\Alert::class);
 
         // register events will be fired right after an event on model fired
-        User::observe(UserObserver::class);
+        // User::observe(UserObserver::class);
     }
 }

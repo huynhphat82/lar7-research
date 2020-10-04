@@ -34,7 +34,7 @@ class SendPostUpdatedJob implements ShouldQueue
      */
     public function handle()
     {
-        $admin =User::where('role', 'admin')->first();
+        $admin = User::where('role', 'admin')->first();
         if ($admin) {
             $admin->notify(new PostUpdatedNotification($this->post));
         }
