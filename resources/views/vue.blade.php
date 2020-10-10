@@ -63,7 +63,7 @@
             }
         </style>
 
-        <script src="{{ asset('js/app.js') }}" defer></script>
+
     </head>
     <body>
         <div class="flex-center position-ref full-height" id="app">
@@ -88,8 +88,12 @@
                     <a href="{{ route('page', 'terms') }}">{{ __('titles.terms') }}</a>
                 </div>
                 <div class="title m-b-md">
-                    Laravel
                     <example-component></example-component>
+                </div>
+
+                <div>
+                    <test-component></test-component>
+                    <datepicker></datepicker>
                 </div>
 
                 <div class="links">
@@ -105,4 +109,14 @@
             </div>
         </div>
     </body>
+    <script>
+        var state = {
+            date: new Date(2016, 9,  16),
+            placeholder: function () {
+                return 'dd/MM/yyyy';
+            }
+        }
+    </script>
+    <script src="{{ asset('js/app.js') }}"></script>
+
 </html>
