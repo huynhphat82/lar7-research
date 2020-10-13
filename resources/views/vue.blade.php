@@ -92,8 +92,18 @@
                 </div>
 
                 <div>
-                    <test-component></test-component>
-                    <datepicker></datepicker>
+                    <test-component v-color-swatch="'red'" v-color-text="'yellow'"></test-component>
+                    <date-picker></date-picker>
+                </div>
+
+                <div>
+                    <single-separator></single-separator>
+                </div>
+
+                <div>
+                    <di-parent>
+                        <di-child></di-child>
+                    </di-parent>
                 </div>
 
                 <div class="links">

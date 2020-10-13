@@ -1,5 +1,5 @@
 <template>
-    <div>Example VueJS </div>
+    <div v-color-text="'blue'">Example VueJS </div>
 </template>
 
 <script>
