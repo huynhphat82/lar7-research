@@ -5,10 +5,10 @@ window.Vue = require('vue');
 
 import MyMixin from './mixins';
 import MyPlugin from './plugins';
+import { BEHttp } from './services';
 
 import './directives';
 import './pipes';
-import Http from './services/common/Http';
 
 // register global mixin
 Vue.mixin(MyMixin);
@@ -17,8 +17,7 @@ Vue.mixin(MyMixin);
 Vue.use(MyPlugin, { someOption: true });
 
 // inject http to vue
-let http = new Http('./');
-Vue.prototype.$http = http;
+Vue.prototype.$http = BEHttp;
 
 // register all components
 window.registerComponents(Vue);

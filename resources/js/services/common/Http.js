@@ -1,7 +1,10 @@
-import axios from "axios"
-import Response from "./Response";
+import axios from 'axios';
+import Response from './Response';
 
 export default class Http {
+
+  instance;
+  options;
 
   /**
    * constructor
@@ -19,6 +22,14 @@ export default class Http {
    */
   constructor (options = {}) {
     this.options = this._filterOptions(this._resolveOptions(options));
+    this.headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    };
+    if (!this.instance) {
+      // create new instance
+      this.instance = axios.create();
+    }
   }
 
   setConfig = (config) => {
@@ -28,9 +39,29 @@ export default class Http {
     return this;
   }
 
+  setHeaders = (headers = {}) => {
+    if (typeof headers === 'object') {
+      this.headers = { ...this.headers, ...headers };
+    }
+    return this;
+  }
+
+  interceptors = (
+    callbacksReq = [conf => conf, err => Promise.reject(err)],
+    callbacksRes = [resp => resp, err => Promise.reject(err)]
+  ) => {
+    if (callbacksReq) {
+      this.instance.interceptors.request.use(...callbacksReq);
+    }
+    if (callbacksRes) {
+      this.instance.interceptors.response.use(...callbacksRes);
+    }
+    return this;
+  }
+
   request = async (url, bodyParams = {}, queryParams = {}, method = 'GET') => {
     try {
-      let responseResult = await axios.request(this._getConfig(url, bodyParams, queryParams, method));
+      let responseResult = await this.instance.request(this._getConfig(url, bodyParams, queryParams, method));
       return Response.success(responseResult.data, responseResult.status);
     } catch (e) {
         return (e.response)
@@ -77,11 +108,6 @@ export default class Http {
     'baseURL', 'baseUrl', 'timeout', 'withCredentials', 'auth', 'maxRedirects', 'responseType'
   ]);
 
-  _defaultHeaders = () => ({
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-  });
-
   _defaultConfigs = (url, bodyParams = {}, queryParams = {}, method = 'GET') => ({
     // url for the request
     url: url,
@@ -102,7 +128,7 @@ export default class Http {
       return data;
     }],
     // `headers` are custom headers to be sent
-    headers: this._defaultHeaders(),
+    headers: this.headers,
     // `params` are the URL parameters to be sent with the request
     params: queryParams,
     // `paramsSerializer` is an optional function in charge of serializing `params`
