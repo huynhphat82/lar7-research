@@ -8,6 +8,7 @@ import MyPlugin from './plugins';
 
 import './directives';
 import './pipes';
+import Http from './services/common/Http';
 
 // register global mixin
 Vue.mixin(MyMixin);
@@ -16,7 +17,8 @@ Vue.mixin(MyMixin);
 Vue.use(MyPlugin, { someOption: true });
 
 // inject http to vue
-Vue.prototype.$http = window.axios || require('axios');
+let http = new Http('./');
+Vue.prototype.$http = http;
 
 // register all components
 window.registerComponents(Vue);

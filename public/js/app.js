@@ -1938,7 +1938,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$mixinPlugin();
     console.log('$http => ', this.$http);
     this.$http.get('https://jsonplaceholder.typicode.com/users').then(function (r) {
-      console.log('r => ', r.data);
+      console.log('r => ', r);
     });
   },
   components: {
@@ -2150,7 +2150,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".css {\n    font-size: 20px;\n    font-weight: bold;\n    color: white;\n}\n", ""]);
+exports.push([module.i, ".css {\r\n    font-size: 20px;\r\n    font-weight: bold;\r\n    color: white;\n}\r\n", ""]);
 
 // exports
 
@@ -36502,9 +36502,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins */ "./resources/js/plugins/index.js");
 /* harmony import */ var _directives__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./directives */ "./resources/js/directives/index.js");
 /* harmony import */ var _pipes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pipes */ "./resources/js/pipes/index.js");
+/* harmony import */ var _services_common_Http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/common/Http */ "./resources/js/services/common/Http.js");
+/* harmony import */ var _services_common_Http__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_services_common_Http__WEBPACK_IMPORTED_MODULE_4__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
 
 
 
@@ -36516,7 +36519,8 @@ Vue.use(_plugins__WEBPACK_IMPORTED_MODULE_1__["default"], {
   someOption: true
 }); // inject http to vue
 
-Vue.prototype.$http = window.axios || __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); // register all components
+var http = new _services_common_Http__WEBPACK_IMPORTED_MODULE_4___default.a('./');
+Vue.prototype.$http = http; // register all components
 
 window.registerComponents(Vue);
 var app = new Vue({
@@ -37296,6 +37300,17 @@ var MyPlugin = {
 
 /***/ }),
 
+/***/ "./resources/js/services/common/Http.js":
+/*!**********************************************!*\
+  !*** ./resources/js/services/common/Http.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\resources\\js\\services\\common\\Http.js: Support for the experimental syntax 'classProperties' isn't currently enabled (24:13):\n\n\u001b[0m \u001b[90m 22 | \u001b[39m  }\u001b[0m\n\u001b[0m \u001b[90m 23 | \u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 24 | \u001b[39m  setConfig \u001b[33m=\u001b[39m (config) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m    | \u001b[39m            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 | \u001b[39m    \u001b[36mif\u001b[39m (\u001b[36mtypeof\u001b[39m config \u001b[33m===\u001b[39m \u001b[32m'object'\u001b[39m) {\u001b[0m\n\u001b[0m \u001b[90m 26 | \u001b[39m      \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39moptions \u001b[33m=\u001b[39m { \u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39moptions\u001b[33m,\u001b[39m \u001b[33m...\u001b[39mconfig }\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 27 | \u001b[39m    }\u001b[0m\n\nAdd @babel/plugin-proposal-class-properties (https://git.io/vb4SL) to the 'plugins' section of your Babel config to enable transformation.\nIf you want to leave it as-is, add @babel/plugin-syntax-class-properties (https://git.io/vb4yQ) to the 'plugins' section to enable parsing.\n    at Parser._raise (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.expectPlugin (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:8971:18)\n    at Parser.parseClassProperty (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12455:12)\n    at Parser.pushClassProperty (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12419:30)\n    at Parser.parseClassMemberWithIsStatic (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12352:14)\n    at Parser.parseClassMember (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12289:10)\n    at C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12241:14\n    at Parser.withTopicForbiddingContext (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:11272:14)\n    at Parser.parseClassBody (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12218:10)\n    at Parser.parseClass (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12193:22)\n    at Parser.parseExportDefaultExpression (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12609:19)\n    at Parser.parseExport (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12530:31)\n    at Parser.parseStatementContent (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:11537:27)\n    at Parser.parseStatement (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)\n    at Parser.parseTopLevel (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:11362:10)\n    at Parser.parse (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:13045:10)\n    at parse (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\parser\\lib\\index.js:13098:38)\n    at parser (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\core\\lib\\parser\\index.js:54:34)\n    at parser.next (<anonymous>)\n    at normalizeFile (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\core\\lib\\transformation\\normalize-file.js:99:38)\n    at normalizeFile.next (<anonymous>)\n    at run (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\core\\lib\\transformation\\index.js:31:50)\n    at run.next (<anonymous>)\n    at Function.transform (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\@babel\\core\\lib\\transform.js:27:41)\n    at transform.next (<anonymous>)\n    at step (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\gensync\\index.js:254:32)\n    at C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\gensync\\index.js:266:13\n    at async.call.result.err.err (C:\\Users\\PC-2018\\Desktop\\web\\php\\lar7-research\\node_modules\\gensync\\index.js:216:11)");
+
+/***/ }),
+
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -37314,8 +37329,8 @@ var MyPlugin = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/huynhphat/Desktop/web/learning/php/laravel/lar7/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/huynhphat/Desktop/web/learning/php/laravel/lar7/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\PC-2018\Desktop\web\php\lar7-research\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\PC-2018\Desktop\web\php\lar7-research\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

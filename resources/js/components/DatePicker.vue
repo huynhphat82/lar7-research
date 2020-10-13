@@ -31,7 +31,7 @@
 
             console.log('$http => ', this.$http);
             this.$http.get('https://jsonplaceholder.typicode.com/users').then(r => {
-              console.log('r => ', r.data)
+              console.log('r => ', r)
             })
         },
         components: {
