@@ -104,6 +104,7 @@
                     <di-parent>
                         <di-child></di-child>
                     </di-parent>
+                    {{-- <p>@{{  errors.first('a') + ' ------- ' }}</p> --}}
                 </div>
 
                 <div class="links">
@@ -120,12 +121,7 @@
         </div>
     </body>
     <script>
-        var state = {
-            date: new Date(2016, 9,  16),
-            placeholder: function () {
-                return 'dd/MM/yyyy';
-            }
-        }
+        const ErrorServer = @json($errors->getMessages());
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
 
