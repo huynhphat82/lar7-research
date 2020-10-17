@@ -6,12 +6,13 @@ window.Vue = require('vue');
 import MyMixin from './mixins';
 import MyPlugin from './plugins';
 import { BEHttp } from './services';
+import { Validator, ValidatorServer } from './validation/Validator';
+import { i18n } from './validation/rules/localize';
+import AppError from './services/common/AppError';
 
 import './directives';
 import './pipes';
 import './validation/rules';
-import { Validator, ValidatorServer } from './validation/Validator';
-import { i18n } from './validation/rules/localize';
 
 // register global mixin
 Vue.mixin(MyMixin);
@@ -29,26 +30,38 @@ Vue.component('ValidatorServer', ValidatorServer);
 // register all components
 window.registerComponents(Vue);
 
-const app = new Vue({
-  el: '#app',
-  // i18n,
-  provide() {
+Vue.mixin({
+  data() {
     return {
-      errors: ServerError
+      errors: new AppError(ErrorServer),
     };
+  },
+  methods: {
+    t(key, config) {
+      return i18n.t(key, config);
+    },
+    trans() {
+      return this.t;
+    },
   },
   created() {
     console.log('xxx => ', i18n.t('validations.messages.required'))
   },
+})
+
+const app = new Vue({
+  el: '#app',
+  provide() {
+    return {
+      $errors: this.errors,
+    };
+  },
   data() {
     return {
-      errors: ServerError,
-      trans: this.$t,
+      //
     };
   },
   methods: {
-    $t(key, config) {
-      return i18n.t(key, config);
-    }
+    //
   }
 });

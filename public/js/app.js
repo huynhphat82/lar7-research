@@ -2045,7 +2045,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins___WEBPACK_IMPORTED_MODULE_1__["default"]],
-  inject: ['errors'],
+  inject: ['$errors'],
   props: {
     format: {
       type: String,
@@ -2067,7 +2067,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$http.get("https://jsonplaceholder.typicode.com/users").then(function (r) {
       console.log("r => ", r);
     });
-    console.log('errorsxxxxxxxxxxxxxxxx => ', this.errors);
+    console.log('$errors => ', this.$errors);
   },
   components: {
     vuejsDatepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -2197,9 +2197,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  // inject: ['errors'],
   data: function data() {
     return {
+      p: '',
       content: 'this is content',
       email: ''
     };
@@ -2207,6 +2214,18 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     console.log("Test component mounted");
     console.log('this.$t', this.trans('validations.messages.required'));
+    console.log('this.errors => ', this.errors);
+  },
+  methods: {
+    onChange: function onChange(event) {
+      console.log('event => ', event.target.value);
+      this.errors.remove('p');
+    },
+    send: function send() {
+      this.$http.get('http://localhost:8000/vue').then(function (r) {
+        console.log('r2 => ', r);
+      });
+    }
   }
 });
 
@@ -2265,7 +2284,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.css[data-v-70d64aa0] {\n  font-size: 20px;\n  font-weight: bold;\n  color: white;\n}\n", ""]);
+exports.push([module.i, "\n.css[data-v-70d64aa0] {\n  font-size: 20px;\n  font-weight: bold;\n  color: white;\n}\n.red[data-v-70d64aa0] {\n  color: red;\n}\n", ""]);
 
 // exports
 
@@ -27995,7 +28014,32 @@ var render = function() {
             }
           }
         ])
-      })
+      }),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          { name: "model", rawName: "v-model", value: _vm.p, expression: "p" }
+        ],
+        attrs: { name: "p" },
+        domProps: { value: _vm.p },
+        on: {
+          change: function($event) {
+            return _vm.onChange($event)
+          },
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.p = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _vm.errors.has("p")
+        ? _c("label", [_vm._v(_vm._s(_vm.errors.first("p")))])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.send } }, [_vm._v("Send")])
     ],
     1
   )
@@ -42631,14 +42675,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins */ "./resources/js/mixins/index.js");
 /* harmony import */ var _plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins */ "./resources/js/plugins/index.js");
 /* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services */ "./resources/js/services/index.js");
-/* harmony import */ var _directives__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./directives */ "./resources/js/directives/index.js");
-/* harmony import */ var _pipes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pipes */ "./resources/js/pipes/index.js");
-/* harmony import */ var _validation_rules__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./validation/rules */ "./resources/js/validation/rules/index.js");
-/* harmony import */ var _validation_Validator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./validation/Validator */ "./resources/js/validation/Validator.js");
-/* harmony import */ var _validation_rules_localize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./validation/rules/localize */ "./resources/js/validation/rules/localize.js");
+/* harmony import */ var _validation_Validator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./validation/Validator */ "./resources/js/validation/Validator.js");
+/* harmony import */ var _validation_rules_localize__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./validation/rules/localize */ "./resources/js/validation/rules/localize.js");
+/* harmony import */ var _services_common_AppError__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/common/AppError */ "./resources/js/services/common/AppError.js");
+/* harmony import */ var _directives__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./directives */ "./resources/js/directives/index.js");
+/* harmony import */ var _pipes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pipes */ "./resources/js/pipes/index.js");
+/* harmony import */ var _validation_rules__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./validation/rules */ "./resources/js/validation/rules/index.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
 
 
 
@@ -42656,31 +42702,40 @@ Vue.use(_plugins__WEBPACK_IMPORTED_MODULE_1__["default"], {
 
 Vue.prototype.$http = _services__WEBPACK_IMPORTED_MODULE_2__["BEHttp"]; // Register validation components globally
 
-Vue.component('Validator', _validation_Validator__WEBPACK_IMPORTED_MODULE_6__["Validator"]);
-Vue.component('ValidatorServer', _validation_Validator__WEBPACK_IMPORTED_MODULE_6__["ValidatorServer"]); // register all components
+Vue.component('Validator', _validation_Validator__WEBPACK_IMPORTED_MODULE_3__["Validator"]);
+Vue.component('ValidatorServer', _validation_Validator__WEBPACK_IMPORTED_MODULE_3__["ValidatorServer"]); // register all components
 
 window.registerComponents(Vue);
-var app = new Vue({
-  el: '#app',
-  // i18n,
-  provide: function provide() {
-    return {
-      errors: ServerError
-    };
-  },
-  created: function created() {
-    console.log('xxx => ', _validation_rules_localize__WEBPACK_IMPORTED_MODULE_7__["i18n"].t('validations.messages.required'));
-  },
+Vue.mixin({
   data: function data() {
     return {
-      errors: ServerError,
-      trans: this.$t
+      errors: new _services_common_AppError__WEBPACK_IMPORTED_MODULE_5__["default"](ErrorServer)
     };
   },
   methods: {
-    $t: function $t(key, config) {
-      return _validation_rules_localize__WEBPACK_IMPORTED_MODULE_7__["i18n"].t(key, config);
+    t: function t(key, config) {
+      return _validation_rules_localize__WEBPACK_IMPORTED_MODULE_4__["i18n"].t(key, config);
+    },
+    trans: function trans() {
+      return this.t;
     }
+  },
+  created: function created() {
+    console.log('xxx => ', _validation_rules_localize__WEBPACK_IMPORTED_MODULE_4__["i18n"].t('validations.messages.required'));
+  }
+});
+var app = new Vue({
+  el: '#app',
+  provide: function provide() {
+    return {
+      $errors: this.errors
+    };
+  },
+  data: function data() {
+    return {//
+    };
+  },
+  methods: {//
   }
 });
 
@@ -43543,6 +43598,113 @@ __webpack_require__.r(__webpack_exports__);
 
 var FBHttp = new _common_Http__WEBPACK_IMPORTED_MODULE_0__["default"]();
 /* harmony default export */ __webpack_exports__["default"] = (FBHttp);
+
+/***/ }),
+
+/***/ "./resources/js/services/common/AppError.js":
+/*!**************************************************!*\
+  !*** ./resources/js/services/common/AppError.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AppError; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var AppError = /*#__PURE__*/function () {
+  function AppError(errors) {
+    _classCallCheck(this, AppError);
+
+    _defineProperty(this, "errors", {});
+
+    this.errors = errors || {};
+    this.errors.a = 'error message';
+  }
+
+  _createClass(AppError, [{
+    key: "has",
+    value: function has(key) {
+      return this.errors.hasOwnProperty(key);
+    }
+  }, {
+    key: "first",
+    value: function first() {
+      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var keys = Object.keys(this.errors);
+
+      if (keys.length <= 0) {
+        return null;
+      }
+
+      var msg = this.errors[key || keys[0]];
+      return Array.isArray(msg) ? msg[0] : msg;
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      return this.errors[key];
+    }
+  }, {
+    key: "only",
+    value: function only() {
+      var _this = this;
+
+      var keys = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+      if (!Array.isArray(keys)) {
+        throw new Error('Parameters must be an array.');
+      }
+
+      return keys.reduce(function (carry, key) {
+        carry[key] = _this.errors[key];
+        return carry;
+      }, {});
+    }
+  }, {
+    key: "all",
+    value: function all() {
+      return this.errors;
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      var _this2 = this;
+
+      var keys = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+      try {
+        keys = !Array.isArray(keys) ? [keys] : keys;
+        keys.forEach(function (key) {
+          if (_this2.errors.hasOwnProperty(key)) {
+            delete _this2.errors[key];
+          }
+        });
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.errors = {};
+      return this;
+    }
+  }]);
+
+  return AppError;
+}();
+
+
 
 /***/ }),
 

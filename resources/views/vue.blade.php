@@ -104,10 +104,7 @@
                     <di-parent>
                         <di-child></di-child>
                     </di-parent>
-                </div>
-
-                <div>
-                    Label @{{ errors.test }}
+                    {{-- <p>@{{  errors.first('a') + ' ------- ' }}</p> --}}
                 </div>
 
                 <div class="links">
@@ -125,10 +122,7 @@
     </body>
 
     <script>
-        // server errors
-        const ServerError = @json($errors);
-        ServerError.test = 'test';
+        const ErrorServer = @json($errors->getMessages());
     </script>
     <script src="{{ asset('js/app.js') }}" defer></script>
-
 </html>

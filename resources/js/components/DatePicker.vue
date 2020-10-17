@@ -8,7 +8,7 @@ import MyMixin from "../mixins/";
 
 export default {
   mixins: [MyMixin],
-  inject: ['errors'],
+  inject: ['$errors'],
   props: {
     format: {
       type: String,
@@ -32,7 +32,7 @@ export default {
       console.log("r => ", r);
     });
 
-    console.log('errorsxxxxxxxxxxxxxxxx => ', this.errors)
+    console.log('$errors => ', this.$errors)
   },
   components: {
     vuejsDatepicker: Datepicker
