@@ -8,6 +8,7 @@ import MyMixin from "../mixins/";
 
 export default {
   mixins: [MyMixin],
+  inject: ['errors'],
   props: {
     format: {
       type: String,
@@ -30,6 +31,8 @@ export default {
     this.$http.get("https://jsonplaceholder.typicode.com/users").then(r => {
       console.log("r => ", r);
     });
+
+    console.log('errorsxxxxxxxxxxxxxxxx => ', this.errors)
   },
   components: {
     vuejsDatepicker: Datepicker

@@ -106,6 +106,10 @@
                     </di-parent>
                 </div>
 
+                <div>
+                    Label @{{ errors.test }}
+                </div>
+
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
@@ -119,14 +123,12 @@
             </div>
         </div>
     </body>
+
     <script>
-        var state = {
-            date: new Date(2016, 9,  16),
-            placeholder: function () {
-                return 'dd/MM/yyyy';
-            }
-        }
+        // server errors
+        const ServerError = @json($errors);
+        ServerError.test = 'test';
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
 </html>
