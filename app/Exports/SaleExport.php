@@ -4,23 +4,26 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Sheet;
 use Maatwebsite\Excel\Writer;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\BeforeExport;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use Maatwebsite\Excel\Concerns\WithCustomStartCell;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder;
 
-class SaleExport extends Export implements FromCollection, WithCustomStartCell, WithTitle, WithHeadings, WithEvents, WithStyles, ShouldAutoSize
+//class SaleExport extends Export implements FromCollection, WithCustomStartCell, WithTitle, WithHeadings, WithEvents, WithStyles, ShouldAutoSize
+class SaleExport extends Export implements FromCollection, WithCustomStartCell, WithTitle, WithHeadings, WithEvents, WithStyles
 {
     /**
      * __construct
@@ -133,7 +136,7 @@ class SaleExport extends Export implements FromCollection, WithCustomStartCell, 
                 ->setValue('Company Name')
                 ->getStyle()->getFont()->setBold(true)->setSize(13);
             $sheet->getCell('C3')
-                ->setValue('Cong ty TNHH Persol Viet Nam')
+                ->setValue('Cong ty TNHH Persol Viet Nam 2')
                 ->getStyle()->getFont()->setSize(13);
 
             $cell = $sheet->getCell('B1');
@@ -212,6 +215,127 @@ class SaleExport extends Export implements FromCollection, WithCustomStartCell, 
             $cell->getStyle()->getFont()->setSize(20)->setBold(true);
             $cell->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
             $cell->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(Color::COLOR_DARKYELLOW);
+
+            $headerStyle = [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'font' => [
+                    'bold' => true,
+                    'size' => 14,
+                ],
+            ];
+            $cellStyle = [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => 'FF000000'],
+                    ]
+                ],
+                'font' => [
+                    'size' => 10,
+                ],
+            ];
+            $borders = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => 'FF000000'],
+                    ]
+                ],
+            ];
+            $bgColor = [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' => 'c4c4c4ff'] // https://jsfiddle.net/Mottie/don375nj/
+                ]
+            ];
+            $bgColorLabel = [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' => '0e40e1ff']
+                ]
+            ];
+            $aligment = [
+                'vertical_center' => [
+                    'alignment' => [
+                        'vertical' => Alignment::VERTICAL_CENTER
+                    ],
+                ],
+                'horizontal_center' => [
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    ],
+                ]
+            ];
+            $firstColumn = 'B';
+            $lastColumn = 'I';
+            $firstRow = 8;
+            $lastRow = 13;
+
+            $blocks = [
+                [
+                    'label' => [
+                        'row' => 7
+                    ],
+                    'header' => [
+                        'row' => 8
+                    ],
+                    'body' => [
+                        'first_row' => 9,
+                        'last_row' => 13
+                    ]
+                ],
+                [
+                    'label' => [
+                        'row' => 15
+                    ],
+                    'header' => [
+                        'row' => 16
+                    ],
+                    'body' => [
+                        'first_row' => 17,
+                        'last_row' => 21
+                    ],
+                ],
+            ];
+
+            $heightRows = [
+                '2' => 22,
+                '3' => 24
+            ];
+
+            foreach ($blocks as $block) {
+                // set style for label
+                $rowLabel = $block['label']['row'];
+                $rowHeader = $block['header']['row'];
+                $sheet->getStyle("B{$rowLabel}:I{$rowLabel}")->applyFromArray($bgColorLabel);
+                // set style for header
+                $sheet->getStyle("B{$rowHeader}:I{$rowHeader}")->applyFromArray(array_merge($bgColor, $borders));
+                // set style for body
+                $sheet->getStyle("B{$block['body']['first_row']}:I{$block['body']['last_row']}")->applyFromArray($cellStyle);
+            }
+
+            foreach ($heightRows as $row => $value) {
+                $sheet->getRowDimension($row)->setRowHeight($value);
+            }
+
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            // set background color for a range
+            //$sheet->getStyle("B8:I8")->applyFromArray($bgColor);
+            // $sheet->getStyle("B7:I7")->applyFromArray($bgColorLabel);
+            // set style for a range
+            // $sheet->getStyle("{$firstColumn}{$firstRow}:{$lastColumn}{$lastRow}")->applyFromArray($cellStyle);
+            // set height for a row
+            //$sheet->getRowDimension('3')->setRowHeight(23);
+            // automatically turns on "wrap text" for the cell when it sees a newline character
+            Cell::setValueBinder(new AdvancedValueBinder());
+            // add new line character to text
+            $sheet->getCell('I9')->setValue("Hello fsdgs sdgsdgs sgsgsd sdsdfsfdsfsd\nWorld");
         };
         // return [
         //     // Style the first row as bold text.

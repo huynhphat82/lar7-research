@@ -29,7 +29,7 @@ class ExporterService
 
     public function sales($filename = null, $writeType = null)
     {
-        // return $this->expoter->download(new SaleExport('B5'), $filename ?? 'download.pdf', $writeType ?? FileFormat::MPDF);
-        return $this->expoter->download(new SaleExport('B5'), $filename, $writeType);
+        return $this->expoter->download(new SaleExport('B5'), $filename ?? 'download.pdf', $writeType ?? FileFormat::MPDF);
+        // return $this->expoter->download(new SaleExport('B5'), $filename, $writeType);
     }
 }
