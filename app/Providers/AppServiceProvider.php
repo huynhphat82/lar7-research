@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\User;
 use App\Binding\Binding;
 use App\Observers\UserObserver;
+use App\Services\Facades\AppLog;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        AppLog::query();
+
         //
         Blade::directive('dd', function ($value) {
             return "<?php dd($value); ?>";
@@ -52,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
                     $method = count($split) > 1 ? trim(strtoupper(trim($split[1])), '\',"'): $method;
                     return $carry;
                 }
-                $carry .= ' '.implode('=', array_map(function($p) { return trim($p); }, $split));
+                $carry .= ' '.implode('=', array_map(function ($p) { return trim($p); }, $split));
                 return $carry;
             }, '');
             if (!$hasMethod) {
