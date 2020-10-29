@@ -182,7 +182,7 @@ class AppLog
                         "DATABASE SERVER" => $query->connectionName,
                         "DATABASE NAME" => $query->connection->getconfig()['database'],
                         "QUERY TIME" => $query->time,
-                        "EXECUTE SQL" => quo $query->sql,
+                        "EXECUTE SQL" => $query->sql,
                         "BINDINGS" => $query->bindings,
                     ], JSON_PRETTY_PRINT));
                 }
