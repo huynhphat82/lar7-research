@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ApiContract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
@@ -17,6 +18,7 @@ class ApiController extends Controller
 
     public function testApi()
     {
+        Log::info(__FUNCTION__, [get_class($this) => __FUNCTION__]);
         echo $this->api->request();
     }
 }

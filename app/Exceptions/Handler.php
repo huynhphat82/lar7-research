@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Services\Facades\AppLog;
+use Exception;
 use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -37,6 +39,8 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         parent::report($exception);
+
+        AppLog::exception($exception, $this->shouldReport($exception));
     }
 
     /**

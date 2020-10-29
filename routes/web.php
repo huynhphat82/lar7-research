@@ -41,3 +41,4 @@ Route::get('/api/newtest', 'ApiNewController@testApi');
 
 Route::get('/{page}', 'TestController')->name('page')->where('page', 'about|contact|terms');
 Route::get('/download', 'TestController@download')->name('admin.download');
+Route::get('/log', 'TestController@testLog')->name('admin.log');

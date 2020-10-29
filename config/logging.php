@@ -99,6 +99,25 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'api' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api/api.log'),
+            'level' => 'debug',
+            'permission' => 0775,
+        ],
+
+        'web' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/webadmin/admin.log'),
+            'level' => 'debug',
+            'permission' => 0775,
+        ],
+
+        'custom' => [
+            'driver' => 'custom',
+            'via' => App\Services\CustomLogger::class,
+        ],
     ],
 
 ];
