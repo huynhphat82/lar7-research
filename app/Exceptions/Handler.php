@@ -40,6 +40,7 @@ class Handler extends ExceptionHandler
     {
         parent::report($exception);
 
+        // Log exception
         AppLog::exception($exception, $this->shouldReport($exception));
     }
 
