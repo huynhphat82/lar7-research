@@ -89,5 +89,9 @@ class Binding
         });
 
         app()->singleton(\App\Contracts\ExporterContract::class, \App\Implementations\ExporterExcel::class);
+
+        app()->singleton(\App\Contracts\Queue::class, function ($app) {
+            return new \App\Implementations\AwsQueue(env('SQS_QUEUE'), new \Aws\Sqs\SqsClient(config('aws')));
+        });
     }
 }

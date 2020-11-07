@@ -6,6 +6,8 @@ use App\User;
 use stdClass;
 use Exception;
 use Aws\Sqs\SqsClient;
+use App\Contracts\Queue;
+use App\Implementations\Message;
 use Aws\Laravel\AwsFacade;
 use App\Jobs\ProcessPodcast;
 use Illuminate\Http\Request;
@@ -16,10 +18,12 @@ use Illuminate\Support\Facades\Log;
 class TestController extends Controller
 {
     private $exporterService;
+    private $queue;
 
-    public function __construct(ExporterService $exporterService)
+    public function __construct(ExporterService $exporterService, Queue $queue)
     {
         $this->exporterService = $exporterService;
+        $this->queue = $queue;
     }
 
     public function __invoke($page)
@@ -255,6 +259,39 @@ class TestController extends Controller
     }
 
     public function testSQS()
+    {
+        $message = ['message' => 'Hello, SQS Queue '.date('Y-m-d H:i:s')];
+        $resultSend = $this->queue->send(new Message($message));
+
+        $resultReceive = $this->queue->receive();
+
+        if ($resultReceive) {
+            try {
+                $resultReceive->process();
+                //$this->queue->delete($resultReceive);
+            } catch (\Throwable $e) {
+               //$this->queue->release($resultReceive);
+               //echo $e->getMessage();
+            }
+        }
+
+        session()->put('sqs', json_encode([
+            'sent' => [
+                'type' => 'Aws SQS Queue',
+                'success' => $resultSend,
+                'message' => $resultSend ? $message['message'] : 'Message could not sent.',
+            ],
+            'receive' => [
+                'type' => 'Aws SQS Queue',
+                'success' => !!$resultReceive,
+                'message' => $resultReceive->data,
+            ]
+        ], JSON_PRETTY_PRINT));
+
+        return redirect()->route('home');
+    }
+
+    public function testSQS2()
     {
         //https://george.webb.uno/posts/aws-simple-queue-service-php-sdk
         //$sqs = app()->make('aws')->createClient('sqs');

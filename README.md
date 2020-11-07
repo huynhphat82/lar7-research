@@ -62,6 +62,15 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 - [OP.GG](https://op.gg)
 - [云软科技](http://www.yunruan.ltd/)
 
+## [Composer]
+If after running composer with error 'Allowed memory size', set COMPOSER_MEMORY_LIMIT=-1:
+- COMPOSER_MEMORY_LIMIT=-1 composer [update/install/{package}]
+
+## [Env]
+If env() not working, run commands:
+- php artisan config:cache
+- php artisan config:clear
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
