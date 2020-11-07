@@ -256,13 +256,70 @@ class TestController extends Controller
 
     public function testSQS()
     {
-        $sqs = app()->make('aws')->createClient(['service' => 'sqs']);
-        //$sqs->sendMessage('Message sent by sqs queue!');
-
+        //https://george.webb.uno/posts/aws-simple-queue-service-php-sdk
+        //$sqs = app()->make('aws')->createClient('sqs');
         //$sqs2 = AwsFacade::createClient('sqs', ['delay' => 2000]);
-        $sqs->sendMessage('Message sent by sqs queue!');
+        $sqs_credentials = config('aws');
+
+        // Instantiate the client
+        $client = new SqsClient($sqs_credentials);
+
+        // Create the queue
+        // $queue_options = [
+        //     'QueueName' =>  env('SQS_QUEUE')
+        // ];
+        // $client->createQueue($queue_options);
+
+        // Get the queue URL from the queue name.
+        $queue_url = $client->getQueueUrl(['QueueName' => env('SQS_QUEUE')])->get('QueueUrl');
+
+        // The message we will be sending
+        $message = ['message' => 'Hello, SQS Queue '.date('Y-m-d H:i:s')];
+
+        // Send the message
+        $resultSend = $client->sendMessage([
+            'QueueUrl' => $queue_url,
+            'MessageBody' => json_encode($message)
+        ]);
+
+        // Receive a message from the queue
+        $resultReceive = $client->receiveMessage([
+            'QueueUrl' => $queue_url
+        ]);
+
+        if ($resultReceive['Messages'] == null) {
+            // No message to process
+            dd('No message to process');
+            exit;
+        }
+
+        // Get the message information
+        // $result_message = array_pop($resultReceive['Messages']);
+        // $queue_handle = $result_message['ReceiptHandle'];
+        // $message_json = $result_message['Body'];
+
+        // Process receive message
+
+        // Delete message from aws sqs queue
+        // $client->deleteMessage([
+        //     'QueueUrl' => $queue_url,
+        //     'ReceiptHandle' => $queue_handle
+        // ]);
+
+
+        // Dealing with failures
+        // $client->changeMessageVisibility([
+        //     'QueueUrl' => $queue_url,
+        //     'ReceiptHandle' => $queue_handle,
+        //     'VisibilityTimeout' => 0
+        // ]);
+
         // dispatch(new  ProcessPodcast('Hello, SQS Queue!'));
-        session()->put('sqs', 'Message sent by sqs queue!');
-        return redirect()->back();
+        session()->put('sqs', json_encode([
+            'send' => 'Message sent by sqs queue: '.json_encode($message, JSON_PRETTY_PRINT),
+            'receive' => $resultReceive['Messages']
+        ], JSON_PRETTY_PRINT));
+
+        return redirect()->route('home');
     }
 }
