@@ -88,6 +88,15 @@
                 <div class="title m-b-md">
                     Laravel
                 </div>
+                <div>
+                    @if (session()->has('sqs'))
+                       <div>{{ session('sqs') }}</div>
+                    @endif
+                    <form method="POST" action="{{ route('admin.sqs') }}">
+                        @csrf
+                        <input type="submit" name="submit" value="Send By SQS Queue" />
+                    </form>
+                </div>
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>

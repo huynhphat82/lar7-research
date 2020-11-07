@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Aws\Laravel\AwsServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -230,6 +231,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
         'AppLog' => App\Services\Facades\AppLog::class,
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
 ];

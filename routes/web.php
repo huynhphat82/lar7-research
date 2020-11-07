@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessPodcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,3 +43,4 @@ Route::get('/api/newtest', 'ApiNewController@testApi');
 Route::get('/{page}', 'TestController')->name('page')->where('page', 'about|contact|terms');
 Route::get('/download', 'TestController@download')->name('admin.download');
 Route::get('/log', 'TestController@testLog')->name('admin.log');
+Route::post('/sqs', 'TestController@testSQS')->name('admin.sqs');

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ExporterService;
-use App\Services\Facades\AppLog;
 use App\User;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use stdClass;
+use Exception;
+use Aws\Sqs\SqsClient;
+use Aws\Laravel\AwsFacade;
+use App\Jobs\ProcessPodcast;
+use Illuminate\Http\Request;
+use App\Services\Facades\AppLog;
+use App\Services\ExporterService;
+use Illuminate\Support\Facades\Log;
 
 class TestController extends Controller
 {
@@ -249,5 +252,17 @@ class TestController extends Controller
             }
 
         };
+    }
+
+    public function testSQS()
+    {
+        $sqs = app()->make('aws')->createClient(['service' => 'sqs']);
+        //$sqs->sendMessage('Message sent by sqs queue!');
+
+        //$sqs2 = AwsFacade::createClient('sqs', ['delay' => 2000]);
+        $sqs->sendMessage('Message sent by sqs queue!');
+        // dispatch(new  ProcessPodcast('Hello, SQS Queue!'));
+        session()->put('sqs', 'Message sent by sqs queue!');
+        return redirect()->back();
     }
 }
