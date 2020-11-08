@@ -34,6 +34,6 @@ class ProcessPodcast implements ShouldQueue
      */
     public function handle()
     {
-        $this->message;
+        return $this->message;
     }
 }

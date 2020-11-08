@@ -13,8 +13,18 @@ $dotenv->load();
 // aws credentitals
 $credentials = include './config/aws.php';
 
+$nameQueue = getenv('SQS_QUEUE');
+
+// Get queue name from cli if has
+if (count($argv) === 2) {
+    $parts = explode('=', $argv[1]);
+    if (count($parts) === 2 && trim($parts[0]) === '--queue') {
+        $nameQueue = trim($parts[1]);
+    }
+}
+
 // Instantiate queue
-$queue = new AwsQueue(getenv('SQS_QUEUE'), new SqsClient($credentials));
+$queue = new AwsQueue($nameQueue, new SqsClient($credentials));
 
 // Continuously poll queue for new messages and process them
 while (true) {

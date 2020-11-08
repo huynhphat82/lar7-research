@@ -258,20 +258,44 @@ class TestController extends Controller
         };
     }
 
+    public function testSQS3()
+    {
+        $resultSend = true;
+        $message = ['message' => 'Test SQS Queue FiFo '.date('Y-m-d H:i:s')];
+
+        try {
+            dispatch(new ProcessPodcast($message))->onQueue(env('SQS_QUEUE_FIFO'));
+        } catch (\Throwable $e) {
+            $message['message'] = $e->getMessage();
+            $resultSend = false;
+        }
+
+        session()->put('sqs', json_encode([
+            'sent' => [
+                'type' => 'Aws SQS Queue Fifo',
+                'success' => $resultSend,
+                'message' => $message['message'],
+            ],
+        ], JSON_PRETTY_PRINT));
+
+        return redirect()->route('home');
+    }
+
     public function testSQS()
     {
         $message = ['message' => 'Hello, SQS Queue '.date('Y-m-d H:i:s')];
-        $resultSend = $this->queue->send(new Message($message));
+        $resultSend = $this->queue->fifo()->send(new Message($message));
 
         $resultReceive = $this->queue->receive();
+        $dataReceive = $resultReceive->data ?? null;
 
         if ($resultReceive) {
             try {
                 $resultReceive->process();
-                //$this->queue->delete($resultReceive);
+                $this->queue->delete($resultReceive);
             } catch (\Throwable $e) {
-               //$this->queue->release($resultReceive);
-               //echo $e->getMessage();
+               $this->queue->release($resultReceive);
+               echo $e->getMessage();
             }
         }
 
@@ -284,7 +308,7 @@ class TestController extends Controller
             'receive' => [
                 'type' => 'Aws SQS Queue',
                 'success' => !!$resultReceive,
-                'message' => $resultReceive->data,
+                'message' => $dataReceive,
             ]
         ], JSON_PRETTY_PRINT));
 
@@ -316,7 +340,9 @@ class TestController extends Controller
         // Send the message
         $resultSend = $client->sendMessage([
             'QueueUrl' => $queue_url,
-            'MessageBody' => json_encode($message)
+            'MessageBody' => json_encode($message),
+            //'MessageGroupId' => uniqid(), // fifo
+            //'MessageDeduplicationId' => uniqid(), // fifo
         ]);
 
         // Receive a message from the queue
@@ -351,9 +377,11 @@ class TestController extends Controller
         //     'VisibilityTimeout' => 0
         // ]);
 
-        // dispatch(new  ProcessPodcast('Hello, SQS Queue!'));
         session()->put('sqs', json_encode([
-            'send' => 'Message sent by sqs queue: '.json_encode($message, JSON_PRETTY_PRINT),
+            'send' => [
+                'message' => $message,
+                'result' => $resultSend->get('MessageId')
+            ],
             'receive' => $resultReceive['Messages']
         ], JSON_PRETTY_PRINT));
 

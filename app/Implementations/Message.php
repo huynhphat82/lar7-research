@@ -53,7 +53,7 @@ class Message
     public function process()
     {
         // Process data here
-        echo "\n";
         print_r('Message processed: '.$this->asJson());
+        echo "\n";
     }
 }

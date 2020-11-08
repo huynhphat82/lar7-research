@@ -21,11 +21,27 @@ class AwsQueue implements Queue
      */
     private $name;
     /**
-     * Queue url
+     * Use queue fifo
      *
-     * @var string
+     * @var boolean
      */
-    private $url;
+    private $useFIFO = false;
+    /**
+     * SEND type as send() method name
+     */
+    private const SEND = 'send';
+    /**
+     * RECEIVE type as receive() method name
+     */
+    private const RECEIVE = 'receive';
+    /**
+     * DELETE type as delete() method name
+     */
+    private const DELETE = 'delete';
+    /**
+     * RELEASE type as release() method name
+     */
+    private const RELEASE = 'release';
 
     /**
      * __construct
@@ -38,7 +54,28 @@ class AwsQueue implements Queue
     {
         $this->client = $client;
         $this->name = $name;
-        $this->url = $this->client->getQueueUrl(['QueueName' => $this->name])->get('QueueUrl');
+    }
+
+    /**
+     * Get queue url
+     *
+     * @return string
+     */
+    private function getUrl()
+    {
+        $name = $this->useFIFO && env('SQS_QUEUE_FIFO') ? env('SQS_QUEUE_FIFO') : $this->name;
+        return $this->client->getQueueUrl(['QueueName' => $name])->get('QueueUrl');
+    }
+
+    /**
+     * Use Queue FIFO
+     *
+     * @return \AwsQueue
+     */
+    public function fifo()
+    {
+        $this->useFIFO = true;
+        return $this;
     }
 
     /**
@@ -52,9 +89,11 @@ class AwsQueue implements Queue
     {
         try {
             $this->client->sendMessage($this->_build(__FUNCTION__, $message->asJson()));
+            $this->useFIFO = false;
             return true;
         } catch (\Exception $e) {
             echo 'Error sending message to queue ' . $e->getMessage();
+            $this->useFIFO = false;
             return false;
         }
     }
@@ -139,23 +178,26 @@ class AwsQueue implements Queue
         // $timeout = args[2] ?? 0;
 
         switch ($type) {
-            case 'send':
-                return [
-                    'QueueUrl' => $this->url,
+            case self::SEND:
+                return array_merge([
+                    'QueueUrl' => $this->getUrl(),
                     'MessageBody' => $data,
-                ];
-            case 'receive':
+                ], $this->useFIFO ? [
+                    'MessageGroupId' => uniqid(),
+                    'MessageDeduplicationId' => uniqid()
+                ] : []);
+            case self::RECEIVE:
                 return [
-                    'QueueUrl' => $this->url,
+                    'QueueUrl' => $this->getUrl(),
                 ];
-            case 'delete':
+            case self::DELETE:
                 return [
-                    'QueueUrl' => $this->url,
+                    'QueueUrl' => $this->getUrl(),
                     'ReceiptHandle' => $data
                 ];
-            case 'release':
+            case self::RELEASE:
                 return [
-                    'QueueUrl' => $this->url,
+                    'QueueUrl' => $this->getUrl(),
                     'ReceiptHandle' => $data,
                     'VisibilityTimeout' => $timeout,
                 ];
