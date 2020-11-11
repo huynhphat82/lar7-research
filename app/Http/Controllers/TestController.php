@@ -294,8 +294,8 @@ class TestController extends Controller
                 $resultReceive->process();
                 $this->queue->fifo()->delete($resultReceive);
             } catch (\Throwable $e) {
-               $this->queue->fifo()->release($resultReceive);
-               echo $e->getMessage();
+                $this->queue->fifo()->release($resultReceive);
+                echo $e->getMessage();
             }
         }
 
