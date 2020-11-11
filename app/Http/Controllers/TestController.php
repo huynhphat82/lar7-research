@@ -286,15 +286,15 @@ class TestController extends Controller
         $message = ['message' => 'Hello, SQS Queue '.date('Y-m-d H:i:s')];
         $resultSend = $this->queue->fifo()->send(new Message($message));
 
-        $resultReceive = $this->queue->receive();
+        $resultReceive = $this->queue->fifo()->receive();
         $dataReceive = $resultReceive->data ?? null;
 
         if ($resultReceive) {
             try {
                 $resultReceive->process();
-                $this->queue->delete($resultReceive);
+                $this->queue->fifo()->delete($resultReceive);
             } catch (\Throwable $e) {
-               $this->queue->release($resultReceive);
+               $this->queue->fifo()->release($resultReceive);
                echo $e->getMessage();
             }
         }
