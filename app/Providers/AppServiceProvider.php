@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\User;
 use App\Binding\Binding;
+use App\Validation\AppRule;
 use App\Observers\UserObserver;
 use App\Services\Facades\AppLog;
 use Illuminate\Support\Facades\Blade;
@@ -31,7 +32,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        // Log sql query automatically
         AppLog::query();
+
+        // Register more rules defined by user
+        AppRule::register();
 
         //
         Blade::directive('dd', function ($value) {
