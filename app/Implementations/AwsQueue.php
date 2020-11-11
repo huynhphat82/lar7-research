@@ -108,6 +108,7 @@ class AwsQueue implements Queue
     {
         try {
             $result = $this->client->receiveMessage($this->_build(__FUNCTION__));
+            $this->useFIFO = false;
 
             if ($result['Messages'] == null) {
                 // No message to process
@@ -119,6 +120,7 @@ class AwsQueue implements Queue
             return new Message($result_message['Body'], $result_message['ReceiptHandle']);
         } catch (\Exception $e) {
             echo 'Error receiving message from queue ' . $e->getMessage();
+            $this->useFIFO = false;
             return false;
         }
     }
@@ -135,9 +137,11 @@ class AwsQueue implements Queue
     {
         try {
             $this->client->deleteMessage($this->_build(__FUNCTION__, $message->receipt_handle));
+            $this->useFIFO = false;
             return true;
         } catch (\Exception $e) {
             echo 'Error deleting message from queue ' . $e->getMessage();
+            $this->useFIFO = false;
             return false;
         }
     }
@@ -154,9 +158,11 @@ class AwsQueue implements Queue
         try {
             // Set the visibility timeout to 0 to make the message visible in the queue again straight away
             $this->client->changeMessageVisibility($this->_build(__FUNCTION__, $message->receipt_handle, 0));
+            $this->useFIFO = false;
             return true;
         } catch (\Exception $e) {
             echo 'Error releasing job back to queue ' . $e->getMessage();
+            $this->useFIFO = false;
             return false;
         }
     }
