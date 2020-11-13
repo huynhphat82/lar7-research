@@ -71,6 +71,21 @@ If env() not working, run commands:
 - php artisan config:cache
 - php artisan config:clear
 
+## [p12]
+- openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile more.crt
+
+> openssl – the command for executing OpenSSL
+
+> pkcs12 – the file utility for PKCS#12 files in OpenSSL
+
+> -export -out certificate.pfx – export and save the PFX file as certificate.pfx
+
+> -inkey privateKey.key – use the private key file privateKey.key as the private key to combine with the certificate.
+
+> -in certificate.crt – use certificate.crt as the certificate the private key will be combined with.
+
+> -certfile more.crt – This is optional, this is if you have any additional certificates you would like to include in the PFX file.
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
