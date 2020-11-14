@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Constant;
 use stdClass;
 use Exception;
 use Aws\Sqs\SqsClient;
 use App\Contracts\Queue;
-use App\Implementations\Message;
 use Aws\Laravel\AwsFacade;
 use App\Jobs\ProcessPodcast;
 use Illuminate\Http\Request;
+use App\Implementations\Message;
 use App\Services\Facades\AppLog;
 use App\Services\ExporterService;
 use Illuminate\Support\Facades\Log;
@@ -386,5 +387,10 @@ class TestController extends Controller
         ], JSON_PRETTY_PRINT));
 
         return redirect()->route('home');
+    }
+
+    public function testValidation()
+    {
+
     }
 }

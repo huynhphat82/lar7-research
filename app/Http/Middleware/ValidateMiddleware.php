@@ -17,9 +17,9 @@ class ValidateMiddleware
     public function handle($request, Closure $next)
     {
         // If it is APIs, validate automatically
-        // if (isApi()) {
-        Validator::startAuto();
-        // }
+        if (isApi()) {
+            Validator::autovalidate();
+        }
 
         return $next($request);
     }

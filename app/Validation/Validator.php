@@ -43,37 +43,78 @@ class Validator
         return [];
     }
 
-    public static function startAuto($request = null)
+    /**
+     * Validate automatically
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return mixed
+     */
+    public static function autovalidate($request = null)
     {
         $request = $request ?: request();
         $requestMethod = $request->getMethod();
         $controllerAction = $request->route()->getActionMethod();
         // Check controlle action
-        $nameActionParts = explode(DIRECTORY_SEPARATOR, request()->route()->getActionName());
+        $nameActionParts = explode(DIRECTORY_SEPARATOR, $request->route()->getActionName());
         $nameAction = end($nameActionParts);
         $splits = explode('@', $nameAction);
         if (count($splits) != 2) {
             $controllerAction = '';
         }
         // Create validation file
-        $controllerParts = explode(DIRECTORY_SEPARATOR, get_class(request()->route()->getController()));
+        $controllerParts = explode(DIRECTORY_SEPARATOR, get_class($request->route()->getController()));
         $controller = preg_replace('/Controller$/i', '', end($controllerParts));
         // RequestMethod + ControllerName (without 'Controller' postfix) + ControllerAction + 'Request'
         $classValidation = ucfirst(strtolower($requestMethod)).ucfirst($controller).ucfirst($controllerAction).'Request';
-        $pathFileValidation = app_path('Validation').DIRECTORY_SEPARATOR.$classValidation.'.php';
-
-        // TODO: Create papping path to validation file
-        // \App\Http\Controller\NameController =>  app_path('Request').FOLDER.VALIDATION_FILENAME
+        $requestPath = self::_resolveRequestPath();
+        $pathFileValidation = app_path($requestPath['path']).DIRECTORY_SEPARATOR.$classValidation.'.php';
 
         // Check validation file
         if (file_exists($pathFileValidation)) {
             //include($pathFileValidation);
             //$classValidation = "\App\Validation\\{$classValidation}";
             //return (new $classValidation)->validate();
-            return app()->make("\App\Validation\\{$classValidation}")->validate();
+            return app()->make("{$requestPath['namespace']}\\{$classValidation}")->validate();
         } else {
             Log::warning("[Validation][Api] => File [{$pathFileValidation}] not exist. It is ignored.");
         }
         return null;
+    }
+
+    /**
+     * Get request path
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    private static function _resolveRequestPath($request = null)
+    {
+        $mapping = config('mapping');
+        $request = $request ?: request();
+        $mappingKey = $request->route()->getActionName();
+        $action = $request->route()->getAction();
+        $namespace = $action['namespace'];
+
+        if (array_key_exists($mappingKey, $mapping)) {
+            $path = $mapping[$mappingKey];
+            if (is_string($path)) {
+                $path = [$path];
+            }
+            if (count($path) === 1) {
+                // build namespace of target validation class
+                $path[] = implode('\\', array_map(function ($segment) {
+                    return ucfirst($segment);
+                }, explode('/', $path[0])));
+            }
+            return [
+                'path' => $path[0],
+                'namespace' => $path[1]
+            ];
+        }
+
+        if (array_key_exists($namespace, $mapping)) {
+
+        }
+        return $mapping['default_request_path'];
     }
 }
