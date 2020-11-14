@@ -9,4 +9,6 @@ class Constant
     const RESPONSE_KEY_STATUS = 'status';
     const RESPONSE_KEY_MESSAGE = 'message';
     const RESPONSE_KEY_MESSAGE_TYPE = 'message_type';
+    const WEB_REQUEST_PATH_KEY = 'web_request_path';
+    const API_REQUEST_PATH_KEY = 'api_request_path';
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Validation;
+namespace App\Validation\Requests\Apis;
 
 use App\Validation\Validator;
 
-class GetTestTestLogRequest extends Validator
+class GetApiTestApiRequest extends Validator
 {
     public function rules()
     {
