@@ -202,9 +202,9 @@ class TestController extends Controller
                 if (array_key_exists($this->_current_method, $this->_screens)) {
                     $this->deps = "screens.{$this->_current_method}";
                     $this->_setPermissions($this->_screens[$this->_current_method]);
-                } else if ($this->_current_method === 'applyField') {
+                } else if (in_array($this->_current_method, ['applyField', 'forField', 'onlyField'])) {
                     if (empty($arguments) || !is_string($arguments[0]) || empty($arguments[0])) {
-                        throw new Exception("The 'applyField' method must has a non empty argument.");
+                        throw new Exception("The '{$this->_current_method}' method must has a non empty argument.");
                     }
                     if ($this->deps) {
                         $parts = explode('.', $this->deps);

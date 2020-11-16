@@ -4,16 +4,15 @@ namespace App\Validation;
 
 use Constant;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 
 class Validator
 {
     /**
-     * validate
+     * Validate request
      *
-     * @param  mixed $params
-     * @return void
+     * @param  array $params
+     * @return bool|\Illuminate\Contracts\Validation\Validator
      */
     public function validate($input = [])
     {
@@ -30,23 +29,38 @@ class Validator
         return true;
     }
 
+    /**
+     * Define validation rules
+     *
+     * @return array
+     */
     public function rules()
     {
         return [];
     }
 
+    /**
+     * Customize error messages
+     *
+     * @return array
+     */
     public function messages()
     {
         return [];
     }
 
+    /**
+     * Cusomize the field names
+     *
+     * @return array
+     */
     public function attributes()
     {
         return [];
     }
 
     /**
-     * Validate automatically
+     * Validate request automatically
      *
      * @param  \Illuminate\Http\Request $request
      * @return mixed
@@ -54,53 +68,41 @@ class Validator
     public static function autovalidate($request = null)
     {
         $request = $request ?: request();
-        $requestMethod = $request->getMethod();
-        $controllerAction = $request->route()->getActionMethod();
         $action = $request->route()->getAction();
-
+        // if use closure, ignore validation
         if (!array_key_exists('controller', $action)) {
+            Log::warning("[Validation][Api] => Controller is not used (Closure). Validation is ignored.");
             return true;
         }
-
-        // Check controlle action
-        $nameActionParts = explode(DIRECTORY_SEPARATOR, $request->route()->getActionName());
-        $nameAction = end($nameActionParts);
-        $splits = explode('@', $nameAction);
-        if (count($splits) != 2) {
-            $controllerAction = '';
-        }
-        // Create validation file
-        $controllerParts = explode(DIRECTORY_SEPARATOR, get_class($request->route()->getController()));
-        $controller = preg_replace('/Controller$/i', '', end($controllerParts));
-        // RequestMethod + ControllerName (without 'Controller' postfix) + ControllerAction + 'Request'
-        $classValidation = ucfirst(strtolower($requestMethod)).ucfirst($controller).ucfirst($controllerAction).'Request';
-        $requestPath = self::_resolveRequestPath();
+        // Create validation class name
+        $classValidation = self::_buildValidationClassName($request);
+        // Resolve path & namspace of validation class
+        $requestPath = self::_resolveRequestPath($request);
         $pathFileValidation = base_path($requestPath['path']).DIRECTORY_SEPARATOR.$classValidation.'.php';
         // Check validation file
         if (file_exists($pathFileValidation)) {
-            //include($pathFileValidation);
-            //$classValidation = "\App\Validation\\{$classValidation}";
-            //return (new $classValidation)->validate();
+            // include($pathFileValidation);
+            // $classValidation = "{$requestPath['namespace']}\\{$classValidation}";
+            // return (new $classValidation)->validate();
             return app()->make("{$requestPath['namespace']}\\{$classValidation}")->validate();
-        } else {
-            Log::warning("[Validation][Api] => File [{$pathFileValidation}] not exist. It is ignored.");
         }
+        Log::warning("[Validation][Api] => File [{$pathFileValidation}] not exist. Validation is ignored.");
         return true;
     }
 
     /**
-     * Get request path
+     * Resolve the request path & namespace
      *
      * @param  \Illuminate\Http\Request $request
-     * @return void
+     * @return array
+     * @throws \Exception
      */
     private static function _resolveRequestPath($request = null)
     {
         $mapping = config('mapping');
         $request = $request ?: request();
         $action = $request->route()->getAction();
-        //$mappingKey = $request->route()->getActionName();
-
+        // Resolve path & namespace for validation class
         $resovlePath = function ($config) {
             if (is_string($config)) {
                 $config = [$config];
@@ -119,7 +121,6 @@ class Validator
                 'namespace' => $config[1],
             ];
         };
-
         // 1. Priority 1st: controller@method
         $controllerMethodKey = $action['controller'];
         if (array_key_exists($controllerMethodKey, $mapping)) {
@@ -130,13 +131,30 @@ class Validator
         if (array_key_exists($controller, $mapping)) {
             return $resovlePath($mapping[$controller]);
         }
-
         // 3. Priority 3rd: url is api
         if (isApi()) {
             return $resovlePath($mapping[Constant::API_REQUEST_PATH_KEY]);
         }
         // 4. Priority 4th: url is web
         return $resovlePath($mapping[Constant::WEB_REQUEST_PATH_KEY]);
+    }
+
+    /**
+     * Build validation class name automatically
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return string
+     */
+    private static function _buildValidationClassName($request = null)
+    {
+        // Create validation file
+        $request = $request ?: request();
+        $requestMethod = $request->getMethod();
+        $controllerAction = $request->route()->getActionMethod();
+        $controllerParts = explode(DIRECTORY_SEPARATOR, get_class($request->route()->getController()));
+        $controllerName = preg_replace('/Controller$/i', '', end($controllerParts));
+        // RequestMethod + ControllerName (without 'Controller' postfix) + ControllerAction + 'Request'
+        return ucfirst(strtolower($requestMethod)).ucfirst($controllerName).ucfirst($controllerAction).'Request';
     }
 
 }

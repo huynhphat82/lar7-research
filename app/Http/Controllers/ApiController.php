@@ -13,7 +13,7 @@ class ApiController extends Controller
     public function __construct(ApiContract $api, $primitives)
     {
         $this->api = $api;
-        var_dump($primitives);
+        // var_dump($primitives);
     }
 
     public function testApi()
