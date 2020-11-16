@@ -391,6 +391,6 @@ class TestController extends Controller
 
     public function testValidation()
     {
-
+        return view('welcome');
     }
 }

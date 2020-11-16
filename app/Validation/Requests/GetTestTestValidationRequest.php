@@ -4,12 +4,12 @@ namespace App\Validation\Requests;
 
 use App\Validation\Validator;
 
-class GetTestTestLogRequest extends Validator
+class GetTestTestValidationRequest extends Validator
 {
     public function rules()
     {
         return [
-            'required'
+            'test' => 'required'
         ];
     }
 

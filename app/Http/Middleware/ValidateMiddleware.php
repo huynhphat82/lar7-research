@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Traits\ApiResponse;
 use App\Validation\Validator;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class ValidateMiddleware
 {
@@ -24,7 +26,10 @@ class ValidateMiddleware
             if (isApi()) {
                 return $this->responseError($validator->errors());
             }
-            return back()->withErrors($validator)->withInput();
+            if ($request->ajax()) {
+                return $this->responseError($validator->errors(), 422);
+            }
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         return $next($request);
     }
