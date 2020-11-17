@@ -71,6 +71,10 @@ If env() not working, run commands:
 - php artisan config:cache
 - php artisan config:clear
 
+## [Artisan]
+Create controller at given path (app/Api/V1/Controllers/TestController.php):
+- php artisan make:controller  App\\Api\\V1\\Controllers\\TestController
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

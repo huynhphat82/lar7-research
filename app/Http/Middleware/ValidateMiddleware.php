@@ -27,7 +27,7 @@ class ValidateMiddleware
             if ($request->ajax()) {
                 return $this->responseError($validator->errors(), 422);
             }
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            //return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         return $next($request);
     }
