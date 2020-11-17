@@ -5,8 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Traits\ApiResponse;
 use App\Validation\Validator;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 
 class ValidateMiddleware
 {

@@ -15,7 +15,7 @@ class GetApiTestApiRequest extends Validator
     public function rules()
     {
         return [
-            'test' => 'bar_force:1,2,2,true,"false"'
+            'test' => 'checkbox_force'
         ];
     }
 
