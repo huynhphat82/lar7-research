@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware([
-    // 'VerifyAccessToken',
-    'api',
+    'VerifyAccessToken',
+    'jwt.auth',
 ])->group(function () {
     Route::get('/test', '\App\Api\V1\Controllers\TestController@index');
 

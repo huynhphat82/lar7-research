@@ -236,6 +236,7 @@ return [
 
         'AppLog' => App\Services\Facades\AppLog::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
     ],
 
 ];
