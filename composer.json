@@ -20,7 +20,8 @@
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "^8.0",
         "shiftonelabs/laravel-sqs-fifo-queue": "^2.0",
-        "tecnickcom/tcpdf": "^6.3"
+        "tecnickcom/tcpdf": "^6.3",
+        "tymon/jwt-auth": "1.0.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
