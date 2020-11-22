@@ -93,5 +93,8 @@ class Binding
         app()->singleton(\App\Contracts\Queue::class, function ($app) {
             return new \App\Implementations\AwsQueue(env('SQS_QUEUE'), new \Aws\Sqs\SqsClient(config('aws')));
         });
+
+        app()->singleton(\App\Contracts\Encrypter::class, \App\Implementations\EncrypterCrypt::class);
+
     }
 }
