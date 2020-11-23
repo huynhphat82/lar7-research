@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// GET ACCESS TOKEN
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -27,3 +28,7 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
+
+// Get X-API-KEY (PUBLIC KEY)
+Route::get('/request-key/{payload?}', '\App\Api\ApiKeyController@apiKey');
+Route::get('/verify-key/{key}', '\App\Api\ApiKeyController@verifyKey');

@@ -2,12 +2,9 @@
 
 namespace App\Api\V2\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use App\Api\ApiController;
 
-class Controller extends BaseController
+class Controller extends ApiController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    //
 }

@@ -1,7 +1,5 @@
 <?php
 
-use App\Jobs\ProcessPodcast;
-use App\Services\Facades\Encrypter;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,11 +54,3 @@ Route::get('/download', 'TestController@download')->name('admin.download');
 Route::get('/log', 'TestController@testLog')->name('admin.log');
 Route::post('/sqs', 'TestController@testSQS')->name('admin.sqs');
 Route::get('/test-validation', 'TestController@testValidation')->name('admin.test-validation');
-
-Route::get('/public-key/{payload?}', function ($payload = null) {
-    echo Encrypter::encrypt($payload);
-});
-
-Route::get('/verify-key/{key}', function ($key = null) {
-    echo Encrypter::verifyKey($key) ? 'Authorized' : 'Unauthorized';
-});
