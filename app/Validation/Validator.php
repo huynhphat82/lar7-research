@@ -17,7 +17,7 @@ class Validator
     public function validate($input = [])
     {
         if (empty($input)) {
-            $input = request()->all();
+            $input = !empty($this->input()) ? $this->input() : request()->all();
         }
 
         $validator = FacadesValidator::make($input, $this->rules(), $this->messages(), $this->attributes());
@@ -27,6 +27,16 @@ class Validator
         }
 
         return true;
+    }
+
+    /**
+     * Declare input for validation
+     *
+     * @return array
+     */
+    public function input()
+    {
+        return [];
     }
 
     /**
@@ -107,6 +117,17 @@ class Validator
             if (is_string($config)) {
                 $config = [$config];
             }
+            // case as api, check api version
+            if ($config === null) {
+                $prefix = ucfirst(strtolower(request()->segment(1)));
+                $version = request()->segment(2);
+                if (preg_match(\Constant::API_VERSION_PATTERN, $version)) {
+                    $version = ucfirst(strtolower($version));
+                    $config = ["app/{$prefix}/{$version}/Requests", "App\\{$prefix}\\{$version}\Requests"];
+                } else {
+                    $config = ["app/{$prefix}/Requests", "App\\{$prefix}\Requests"];
+                }
+            }
             if (!is_array($config) || empty($config)) {
                 throw new Exception('It must be a non-empty array or a string.');
             }
@@ -133,10 +154,10 @@ class Validator
         }
         // 3. Priority 3rd: url is api
         if (isApi()) {
-            return $resovlePath($mapping[Constant::API_REQUEST_PATH_KEY]);
+            return $resovlePath(null);
         }
         // 4. Priority 4th: url is web
-        return $resovlePath($mapping[Constant::WEB_REQUEST_PATH_KEY]);
+        return $resovlePath($mapping[Constant::WEB_REQUEST_PATH_KEY] ?? ['app/Http/Requests', 'App\Http\Requests']);
     }
 
     /**
