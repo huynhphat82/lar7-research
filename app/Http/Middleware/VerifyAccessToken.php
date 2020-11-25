@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Facades\Encrypter;
 use Closure;
 use App\Traits\ApiResponse;
+use Constant;
 
 class VerifyAccessToken
 {
@@ -19,17 +21,40 @@ class VerifyAccessToken
     public function handle($request, Closure $next)
     {
         if (isApi()) {
-            $tokensAllowed = ['44b48f2305bf2680', 'a40d97bfc2ab0e56'];
-            if ($request->header('Authorization')) {
-                $token = $request->header('Authorization');
-
-                // check token
-                if (!in_array($token, $tokensAllowed)) {
-                    return $this->responseError('Api token is not valid.');
-                }
+            $xApiKey = $this->xApiKey();
+            if (empty($xApiKey)) {
+                return $this->responseError('Api token is missing.');
             }
-            return $this->responseError('Api token is missing.');
+            if (!Encrypter::verifyKey($xApiKey)) {
+                return $this->responseError('Api token is not valid.');
+            }
         }
         return $next($request);
+    }
+
+    /**
+     * Get X-API-KEY from request
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return string
+     */
+    private function xApiKey($request = null)
+    {
+        $request = $request ?: request();
+        // X-API-KEY
+        if ($request->header(Constant::X_API_TOKEN)) {
+            return $request->header(Constant::X_API_TOKEN);
+        }
+        // X-Api-Key
+        $key = str_replace(' ', '-', ucwords(str_replace('-', ' ', strtolower(Constant::X_API_TOKEN))));
+        if ($request->header($key)) {
+            return $request->header($key);
+        }
+        // x-api-key
+        $key = str_replace(' ', '-', str_replace('-', ' ', strtolower(Constant::X_API_TOKEN)));
+        if ($request->header($key)) {
+            return $request->header($key);
+        }
+        return null;
     }
 }

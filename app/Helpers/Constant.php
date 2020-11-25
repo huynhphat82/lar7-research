@@ -12,4 +12,5 @@ class Constant
     const WEB_REQUEST_PATH_KEY = 'web_request_path';
     const API_REQUEST_PATH_KEY = 'api_request_path';
     const API_VERSION_PATTERN = '#^([v])([\-,\*,\w]+[\.]?)+(\w)*#i';
+    const X_API_TOKEN = 'X-API-TOKEN';
 }
