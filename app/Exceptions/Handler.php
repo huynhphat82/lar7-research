@@ -2,13 +2,17 @@
 
 namespace App\Exceptions;
 
-use App\Services\Facades\AppLog;
 use Exception;
 use Throwable;
+use App\Services\Facades\AppLog;
+use App\Traits\ApiResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -54,6 +58,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if (isApi()) {
+            // Missing jwt token from headers
+            if ($exception instanceof UnauthorizedHttpException) {
+                return $this->responseError($exception->getMessage(), $exception->getStatusCode());
+            }dd($exception->getMessage(), $exception->getStatusCode());
+            return $this->responseError($exception->getMessage(), $exception->getStatusCode());
+        }
         return parent::render($request, $exception);
     }
 }
