@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -107,6 +108,8 @@ class SaleExport extends Export implements FromCollection, WithCustomStartCell, 
             AfterSheet::class => function (AfterSheet $event) {
                 $event->sheet->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
 
+                $sheet = $event->sheet->getDelegate();
+
                 $event->sheet->styleCells(
                     'B5:D10',
                     [
@@ -118,6 +121,39 @@ class SaleExport extends Export implements FromCollection, WithCustomStartCell, 
                         ]
                     ]
                 );
+
+                $richtext = new RichText();
+                $richtext->createTextRun('☑');//->getFont()->setSize(18);
+                $richtext->createTextRun(' Transfer');
+                $richtext->createTextRun('☐');//->getFont()->setSize(18);
+                $richtext->createTextRun(' Cash');
+
+                $sheet->setCellValue('B23', $richtext);
+                $sheet->getStyle('B23')->applyFromArray([
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    ],
+                    'font' => ['size' => 14]
+                ]);
+
+                $richtext2 = new RichText();
+                $richtext2->createTextRun('☑');
+                $richtext2->createTextRun(' Transfer');
+
+                $richtext3 = new RichText();
+                $richtext3->createTextRun('☐');
+                $richtext3->createTextRun(' Cash');
+
+                $sheet->setCellValue('B24', $richtext2);
+                $sheet->setCellValue('C24', $richtext3);
+                $sheet->getStyle('B24:C24')->applyFromArray([
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    ],
+                    'font' => ['size' => 14]
+                ]);
             },
         ];
     }
