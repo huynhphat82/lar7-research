@@ -10,19 +10,23 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use Tests\Common\Traits\Asserts;
 
 class TestCase extends BaseTestCase
 {
+    use Asserts;
+
     /**
      * @var \GuzzleHttp\Client
      */
-    protected $http;
+    private $http;
     /**
      * Base url
      *
      * @var string
      */
     protected $baseUrl = '';
+    protected static $prefixApi = 'api';
 
     /**
      * __construct
@@ -50,7 +54,7 @@ class TestCase extends BaseTestCase
 
         $this->http = new Client([
             // Base URI is used with relative requests
-            //'base_uri' => $this->baseUrl,
+            'base_uri' => $this->baseUrl,
             // You can set any number of default request options.
             'timeout'  => 2.0,
             'connect_timeout' => 3.0,
@@ -94,6 +98,17 @@ class TestCase extends BaseTestCase
     protected function addHeaders()
     {
         return [];
+    }
+
+    /**
+     * Get url with prefix
+     *
+     * @param  string $route
+     * @return string
+     */
+    public static function url($route = '')
+    {
+        return self::$prefixApi.'/'.ltrim($route, '/');
     }
 
     /**
