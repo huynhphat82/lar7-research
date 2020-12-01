@@ -34,7 +34,6 @@ Trait Asserts
                         $expectedValueArr = (array) $expectedValue;
                         $value = (array) $v;
                         $valuesChecked = array_intersect_assoc($expectedValueArr, $value);
-                        var_dump($expectedValueArr, $value, $valuesChecked);
                         if (count($expectedValueArr) === count($valuesChecked)) {
                             $hasExist = true;
                             break;
