@@ -19,5 +19,6 @@ Route::middleware([
     'jwt.auth',
 ])->group(function () {
     Route::get('/test', '\App\Api\V1\Controllers\TestController@index');
-
+    Route::post('request-messages', '\App\Api\V1\Controllers\TestController@requestMessages');
+    Route::post('request-read-messages', '\App\Api\V1\Controllers\TestController@requestReadMessages');
 });

@@ -21,10 +21,10 @@ class AuthController extends Controller
     }
 
     /**
-    * Get a JWT via given credentials.
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login()
     {
         $credentials = request(['email', 'password']);
@@ -40,20 +40,20 @@ class AuthController extends Controller
     }
 
     /**
-    * Get the authenticated User.
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function me()
     {
         return $this->responseSuccess(auth($this->guard)->user());
     }
 
     /**
-    * Log the user out (Invalidate the token).
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
         auth($this->guard)->logout();
@@ -62,10 +62,10 @@ class AuthController extends Controller
     }
 
     /**
-    * Refresh a token.
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function refresh()
     {
         return $this->responseSuccess(auth($this->guard)->refresh());

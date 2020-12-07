@@ -75,6 +75,9 @@ If env() not working, run commands:
 Create controller at given path (app/Api/V1/Controllers/TestController.php):
 - php artisan make:controller  App\\Api\\V1\\Controllers\\TestController
 
+## [Queue]
+- php artisan queue:work sqsfifo
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

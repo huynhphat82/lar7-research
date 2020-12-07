@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Implementations\Message;
 use App\Services\Facades\AppLog;
 use App\Services\ExporterService;
+use App\Services\QueueService;
 use Illuminate\Support\Facades\Log;
 
 class TestController extends Controller
@@ -284,8 +285,12 @@ class TestController extends Controller
 
     public function testSQS()
     {
-        $message = ['message' => 'Hello, SQS Queue '.date('Y-m-d H:i:s')];
+        $message = ['message' => 'Hellooooooo, SQS Queue '.date('Y-m-d H:i:s')];
         $resultSend = $this->queue->fifo()->send(new Message($message));
+        dispatch(new ProcessPodcast($message))
+            ->onConnection(env('QUEUE_CONNECTION'))
+            ->onQueue(env('SQS_QUEUE_FIFO'));
+        //QueueService::push($message);
 
         $resultReceive = $this->queue->fifo()->receive();
         $dataReceive = $resultReceive->data ?? null;

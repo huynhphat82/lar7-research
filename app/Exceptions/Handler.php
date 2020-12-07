@@ -62,8 +62,12 @@ class Handler extends ExceptionHandler
             // Missing jwt token from headers
             if ($exception instanceof UnauthorizedHttpException) {
                 return $this->responseError($exception->getMessage(), $exception->getStatusCode());
-            }dd($exception->getMessage(), $exception->getStatusCode());
-            return $this->responseError($exception->getMessage(), $exception->getStatusCode());
+            }
+            $statusCode = 422;
+            if (method_exists($exception, 'getStatusCode')) {
+                $statusCode = $exception->getStatusCode();
+            }
+            return $this->responseError($exception->getMessage(), $statusCode);
         }
         return parent::render($request, $exception);
     }
