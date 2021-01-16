@@ -2,6 +2,7 @@
 
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,4 +73,19 @@ Route::get('/sendmail', function () {
         $message->from('xyz@gmail.com','Virat Gandhi');
     });
     echo "Basic Email Sent. Check your inbox.";
+});
+
+Route::get('/cache', function () {
+    // cache()->set('name', 'Jhp Phich');
+    // echo cache()->get('name');
+    echo env('CACHE_PREFIX')."<br>";
+    Redis::set('name', 'Jhp Phich - '.date('Y-m-d H:i:s'));
+    Redis::set('age', 40);
+    Redis::set('sex', 'Male');
+    Redis::set('edu', 'Master');
+    echo Redis::get('name');
+
+    Redis::publish('test-channel', json_encode([
+        'name' => 'Adam Wathan - '.date('Y-m-d H:i:s')
+    ]));
 });
