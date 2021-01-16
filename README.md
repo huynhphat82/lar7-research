@@ -87,6 +87,25 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Setup sendmail at localhost
+### 1. Install 'maildev' package
+	npm install -g maildev
+
+### 2. Start sendmail server
+	maildev
+	
+	>> Where: SMTP Port: 1025 | WebUI Port: 1080
+
+### 3. Specify port for stmp & web ui	
+	maildev -s 10025 -w 10080
+
+    Where: SMTP Port: 10025 | WebUI Port: 10080
+	
+### 4. Specify user/password when accessing to web ui
+	maildev -s 10025 -w 10080 --web-user test --web-pass test
+	
+	Where: smtp port: 10025 | webui port: 10080 | user: test | pass: test
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

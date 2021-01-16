@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,3 +56,20 @@ Route::get('/download', 'TestController@download')->name('admin.download');
 Route::get('/log', 'TestController@testLog')->name('admin.log');
 Route::post('/sqs', 'TestController@testSQS')->name('admin.sqs');
 Route::get('/test-validation', 'TestController@testValidation')->name('admin.test-validation');
+
+Route::get('/sendmail', function () {
+    $data = ['name' => 'Jhp Phich'];
+
+    // Specify content with text format
+    Mail::send(['text' => 'mail/mail'], $data, function (Message $message) {
+        $message->to('abc@gmail.com', 'Tutorials Point')->subject('Laravel Basic Testing Mail (Text)');
+        $message->from('xyz@gmail.com','Virat Gandhi');
+    });
+
+    // Sepecify content with html format
+    Mail::send(['html' => 'mail/mail'], $data, function (Message $message) {
+        $message->to('abc@gmail.com', 'Tutorials Point')->subject('Laravel Basic Testing Mail');
+        $message->from('xyz@gmail.com','Virat Gandhi');
+    });
+    echo "Basic Email Sent. Check your inbox.";
+});
