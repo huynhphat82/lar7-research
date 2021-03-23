@@ -65,6 +65,17 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'minio' => [
+            'driver' => 's3',
+            'key' => env('MINIO_AWS_ACCESS_KEY_ID'),
+            'secret' => env('MINIO_AWS_SECRET_ACCESS_KEY'),
+            'region' => env('MINIO_AWS_DEFAULT_REGION'),
+            'bucket' => env('MINIO_AWS_BUCKET'),
+            // 'url' => env('MINIO_AWS_URL'),
+            'endpoint' => env('MINIO_AWS_ENDPOINT', 'http://127.0.0.1:9005'),
+            'use_path_style_endpoint' => env('USE_PATH_STYLE_ENDPOINT', true),
+        ],
+
     ],
 
     /*
